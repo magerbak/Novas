@@ -31,7 +31,7 @@ Run the self-check tool or example application by:
 * Running `make check` or
 * Running `make example`
 
-To build your own application should have it include `eph_manager.h` and `novas.h` and link
+To build your own application, you should have it include `eph_manager.h` and `novas.h` and link
 with lib/libnovas.a. For simple applications, it would be trivial to just add a
 Makefile target for your application, similar to the `example` target.
 
