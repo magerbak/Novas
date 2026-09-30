@@ -7948,10 +7948,10 @@ short int cio_array (double jd_tdb, long int n_pts,
    Read the file header.
 */
 
-      fread (&jd_beg, double_size, (size_t) 1, cio_file);
-      fread (&jd_end, double_size, (size_t) 1, cio_file);
-      fread (&t_int, double_size, (size_t) 1, cio_file);
-      fread (&n_recs, long_size, (size_t) 1, cio_file);
+      if (fread (&jd_beg, double_size, (size_t) 1, cio_file) != 1) return (error = 1);
+      if (fread (&jd_end, double_size, (size_t) 1, cio_file) != 1) return (error = 1);
+      if (fread (&t_int, double_size, (size_t) 1, cio_file) != 1) return (error = 1);
+      if (fread (&n_recs, long_size, (size_t) 1, cio_file) != 1) return (error = 1);
    }
 
 /*
@@ -7969,7 +7969,7 @@ short int cio_array (double jd_tdb, long int n_pts,
    the last value of 'n_pts'.
 */
 
-   del_n_pts = abs (n_pts - last_n_pts);
+   del_n_pts = labs (n_pts - last_n_pts);
 
 /*
    Allocate memory for the 't' and 'ra' arrays.
@@ -8032,7 +8032,7 @@ short int cio_array (double jd_tdb, long int n_pts,
 */
 
    del_index = index_rec - last_index_rec;
-   abs_del_index = abs (del_index);
+   abs_del_index = labs (del_index);
 
 /*
    Determine the file read strategy.
@@ -8050,8 +8050,8 @@ short int cio_array (double jd_tdb, long int n_pts,
 
       for (i = 0L; i < n_pts; i++)
       {
-         fread (&t[i], double_size, (size_t) 1, cio_file);
-         fread (&ra[i], double_size, (size_t) 1, cio_file);
+         if (fread (&t[i], double_size, (size_t) 1, cio_file) != 1) return (error = 1);
+         if (fread (&ra[i], double_size, (size_t) 1, cio_file) != 1) return (error = 1);
       }
    }
 
@@ -8069,7 +8069,7 @@ short int cio_array (double jd_tdb, long int n_pts,
 
     else if ((abs_del_index <= n_pts) && (del_n_pts == 0))
    {
-      n_swap = abs (n_pts - abs_del_index);
+      n_swap = labs (n_pts - abs_del_index);
       n_read = abs_del_index;
 
 /*
@@ -8094,8 +8094,8 @@ short int cio_array (double jd_tdb, long int n_pts,
 
          for (i = 0L; i < n_read; i++)
          {
-            fread (&t[i], double_size, (size_t) 1, cio_file);
-            fread (&ra[i], double_size, (size_t) 1, cio_file);
+            if (fread (&t[i], double_size, (size_t) 1, cio_file) != 1) return (error = 1);
+            if (fread (&ra[i], double_size, (size_t) 1, cio_file) != 1) return (error = 1);
          }
       }
 
@@ -8123,8 +8123,8 @@ short int cio_array (double jd_tdb, long int n_pts,
          j = i++;
          for (i = j; i < n_pts; i++)
          {
-            fread (&t[i], double_size, (size_t) 1, cio_file);
-            fread (&ra[i], double_size, (size_t) 1, cio_file);
+            if (fread (&t[i], double_size, (size_t) 1, cio_file) != 1) return (error = 1);
+            if (fread (&ra[i], double_size, (size_t) 1, cio_file) != 1) return (error = 1);
          }
       }
    }
@@ -8615,7 +8615,7 @@ void transform_hip (cat_entry *hipparcos,
 
 short int transform_cat (short int option, double date_incat,
                          cat_entry *incat, double date_newcat,
-                         char newcat_id[SIZE_OF_CAT_NAME],
+                         const char *newcat_id,
 
                          cat_entry *newcat)
 /*
@@ -8646,7 +8646,7 @@ short int transform_cat (short int option, double date_incat,
          the struct definition (struct defined in novas.h).
       date_newcat (double)
          TT Julian date, or year, of transformed catalog data.
-      newcat_id[SIZE_OF_CAT_NAME] (char)
+      *newcat_id (char)
          Catalog identifier ((SIZE_OF_CAT_NAME - 1) characters maximum)
          e.g. HIP = Hipparcos, TY2 = Tycho-2.
 
@@ -9409,8 +9409,8 @@ double norm_ang (double angle)
 
 /********make_cat_entry */
 
-short int make_cat_entry (char star_name[SIZE_OF_OBJ_NAME],
-                          char catalog[SIZE_OF_CAT_NAME],
+short int make_cat_entry (const char* star_name,
+                          const char* catalog,
                           long int star_num, double ra, double dec,
                           double pm_ra, double pm_dec, double parallax,
                           double rad_vel,
@@ -9428,9 +9428,9 @@ short int make_cat_entry (char star_name[SIZE_OF_OBJ_NAME],
 
    INPUT
    ARGUMENTS:
-      star_name[SIZE_OF_OBJ_NAME] (char)
+      *star_name (char)
          Object name ((SIZE_OF_OBJ_NAME - 1) characters maximum).
-      catalog[SIZE_OF_CAT_NAME] (char)
+      *catalog (char)
          Catalog identifier ((SIZE_OF_CAT_NAME - 1) characters maximum)
          e.g. HIP = Hipparcos, TY2 = Tycho-2.
       star_num (long int)
@@ -9515,7 +9515,7 @@ short int make_cat_entry (char star_name[SIZE_OF_OBJ_NAME],
 /********make_object */
 
 short int make_object (short int type, short int number,
-                       char name[SIZE_OF_OBJ_NAME], cat_entry *star_data,
+                       const char* name, cat_entry *star_data,
 
                        object *cel_obj)
 /*
@@ -9542,7 +9542,7 @@ short int make_object (short int type, short int number,
                             Moon = 11
             For 'type' = 1: minor planet number
             For 'type' = 2: set to 0 (zero)
-      name[SIZE_OF_OBJ_NAME] (char)
+      *name (char)
          Name of the object ((SIZE_OF_OBJ_NAME - 1) characters maximum).
       *star_data (struct cat_entry)
          Structure containing basic astrometric data for any celestial
