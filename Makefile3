@@ -32,7 +32,7 @@ SOURCES := \
 	readeph0.c
 
 
-all: $(BUILD_DIRS) $(BUILD_TARGET_LIB) JPLEPH check
+all: $(BUILD_DIRS) $(BUILD_TARGET_LIB) check
 
 # Builds a test executable to check library.
 check: $(APP_DIR)/checkout-stars
@@ -51,10 +51,6 @@ $(BUILD_TARGET_LIB): $(OBJS)
 	@echo Updating library $@
 	$(MKLIB)
 
-JPLEPH:
-	@echo Fetching $@
-	# Fetch DE405 binary (little-endian), for 1900-2049
-	wget -q -O $@ https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/de405/lnx1900.405
 
 $(APP_DIR)/checkout-stars: $(OBJ_DIR)/checkout-stars.o $(BUILD_TARGET_LIB)
 	@echo $@
