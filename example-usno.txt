@@ -1,4 +1,4 @@
-JPL ephemeris DE405 open. Start JD = 2305424.50  End JD = 2525008.50
+JPL ephemeris DE405 open. Start JD = 2414992.50  End JD = 2469808.50
 
 NOVAS Sample Calculations
 -------------------------

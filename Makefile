@@ -35,11 +35,14 @@ SOURCES := \
 
 all: $(BUILD_DIRS) $(BUILD_TARGET_LIB) JPLEPH check
 
-# Builds a test executable to check library.
-check: $(APP_DIR)/checkout-stars-full
-	$< > checkout-stars-full-local.txt
-	@echo Comparing output.
+# Builds a test and example executable to check library.
+check: $(APP_DIR)/checkout-stars-full $(APP_DIR)/example
+	$(APP_DIR)/checkout-stars-full > checkout-stars-full-local.txt
+	@echo Comparing test output.
 	diff -w checkout-stars-full-usno.txt checkout-stars-full-local.txt
+	$(APP_DIR)/example > exampple-local.txt
+	@echo Comparing example output.
+	diff -w example-usno.txt example-local.txt
 
 $(OBJ_DIR) $(LIB_DIR) $(APP_DIR):
 	mkdir -p $@
@@ -58,6 +61,10 @@ JPLEPH:
 	wget -q -O $@ https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/de405/lnx1900.405
 
 $(APP_DIR)/checkout-stars-full: $(OBJ_DIR)/checkout-stars-full.o $(BUILD_TARGET_LIB)
+	@echo $@
+	$(LINK)
+
+$(APP_DIR)/example: $(OBJ_DIR)/example.o $(BUILD_TARGET_LIB)
 	@echo $@
 	$(LINK)
 
