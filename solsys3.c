@@ -521,7 +521,7 @@ void sun_eph (double jd,
    double sum_lon = 0.0;
    double sum_r = 0.0;
    const double factor = 1.0e-07;
-   double u, arg, lon, lat, t, emean, sin_lon;
+   double u, arg, lon, t, emean, sin_lon;
 
    struct sun_con
    {
@@ -614,8 +614,6 @@ void sun_eph (double jd,
    lon = fmod (lon, TWOPI);
    if (lon < 0.0)
       lon += TWOPI;
-
-   lat = 0.0;
 
    *dis = 1.0001026 + factor * sum_r;
 

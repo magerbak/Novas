@@ -1,5 +1,5 @@
-# Linux Makefile to build NOVAS C library and test application
-# using solsys1.c and fetch ephemeris file.
+# Linux Makefile to build NOVAS C library and test applications
+# using solsys3.c
 
 OBJ_DIR := ./obj
 LIB_DIR := ./lib
@@ -28,18 +28,17 @@ SOURCES := \
 	novas.c \
 	novascon.c \
 	nutation.c \
-	solsys1.c \
-	eph_manager.c \
+	solsys3.c \
 	readeph0.c
 
 
 all: $(BUILD_DIRS) $(BUILD_TARGET_LIB) JPLEPH check
 
 # Builds a test executable to check library.
-check: $(APP_DIR)/checkout-stars-full
-	$< > checkout-stars-full-local.txt
+check: $(APP_DIR)/checkout-stars
+	$< > checkout-stars-local.txt
 	@echo Comparing output.
-	diff -w checkout-stars-full-usno.txt checkout-stars-full-local.txt
+	diff -w checkout-stars-usno.txt checkout-stars-local.txt
 
 $(OBJ_DIR) $(LIB_DIR) $(APP_DIR):
 	mkdir -p $@
@@ -57,7 +56,7 @@ JPLEPH:
 	# Fetch DE405 binary (little-endian), for 1900-2049
 	wget -q -O $@ https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/de405/lnx1900.405
 
-$(APP_DIR)/checkout-stars-full: $(OBJ_DIR)/checkout-stars-full.o $(BUILD_TARGET_LIB)
+$(APP_DIR)/checkout-stars: $(OBJ_DIR)/checkout-stars.o $(BUILD_TARGET_LIB)
 	@echo $@
 	$(LINK)
 
