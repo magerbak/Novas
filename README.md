@@ -18,9 +18,12 @@ passed strings before copying.
 2. Makefiles have been added to handle building a separate static library (libnovas.a) as
 well as the self-check applications with appropriate dependency checking.
 There are two Makefiles:
-   1. `Makefile` builds the library to use `solsys1.c` and `eph_manager.c` which expects to open a binary ephemeris file named `JPLEPH` in the current directory.
+   1. `Makefile` builds the library to use `solsys1.c` and `eph_manager.c` which expects to be passed the path to a binary ephemeris file.
    2. `Makefile3` builds the library to use `solsys3.c` which is self-contained for use with just the Sun and stars.
 3. `Makefile` automatically fetches an x86 (little-endian) binary ephemeris file from its current location at https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/.
+4. The test output files for the checkout self-tests have been converted from DOS to unix line-endings and I updated the first line to reflect the different date range associated with the above ephemeris file.
+5. Add C linkage guards so the library can be linked with C++ applications.
+6. After creating this library I stumbled across https://github.com/toddcarnes/novas.git which is another copy of NOVAS C on github. This repo has made a few bugfixes and added support for many more ephemeris versions, so I have incorporated those fixes here also.
 
 ## Building using an ephemeris file
 If you are interested in building an application to perform astronomical operations
@@ -61,7 +64,7 @@ language, this statement is only true if your software makes no effort to serial
 That's a solved problem, as demonstrated by every network application that exchanges binary data.
 
 Because the NOVAS library still depends on ephemeris files in native binary format, there
-are conversion tools that convert the ASCII files into binary for given machine architecture.
+are conversion tools that convert the ASCII files into binary for a given machine architecture.
 However, the official version of this tool is only provided in Fortran. My attempts to use it
 generated ephemeris files that didn't pass the self-check test (the self-check test itself
 aborts with a floating point exception even on the official binary DE405 files). [Others](https://github.com/axd1967/erik-de-man-cn)
@@ -72,7 +75,7 @@ library from parsing those files.
 Fortunately, JPL does host some pregenerated binary files for both big and little-endian
 architectures, which is what this project uses instead (although these are not
 mentioned in any of the documentation that I came across). The downside is that
-there is less flexibility with the data ranges provided and the files are larger than
+there is less flexibility with the date ranges provided and the files are larger than
 needed for many applications. I think a tool for trimming binary files would be
 straightforward, so I may add that at some point.
 
