@@ -35,8 +35,8 @@ To build your own application, you should have it include `eph_manager.h` and `n
 with lib/libnovas.a. For simple applications, it would be trivial to just add a
 Makefile target for your application, similar to the `example` target.
 
-For applications in another location, add the appropriate `-I` include path
-to this repo directory and a `-L` link path to the `lib/` subdirectory. Your
+For applications in another location, add this repo directory as an `-I` include
+path in your compiler options and as a prefix to lib/libnovas.a. Your
 application will be responsible for calling `ephem_open()` with a path to the
 ephemeris file (you may wish to make a copy or link in your application directory
 or a well-known location), as well as `ephem_close()`.
