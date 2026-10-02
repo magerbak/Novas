@@ -11,40 +11,22 @@
 */
 
 #ifndef _NOVAS_
-   #define _NOVAS_
+#define _NOVAS_
 
-   #ifndef __STDIO__
-      #include <stdio.h>
-   #endif
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
 
-   #ifndef __MATH__
-      #include <math.h>
-   #endif
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-   #ifndef __STRING__
-      #include <string.h>
-   #endif
-
-   #ifndef __STDLIB__
-      #include <stdlib.h>
-   #endif
-
-   #ifndef __CTYPE__
-      #include <ctype.h>
-   #endif
-
-   #ifndef _CONSTS_
-      #include "novascon.h"
-   #endif
-
-   #ifndef _SOLSYS_
-      #include "solarsystem.h"
-   #endif
-
-   #ifndef _NUTATION_
-      #include "nutation.h"
-   #endif
-
+#include "novascon.h"
+#include "solarsystem.h"
+#include "nutation.h"
 
 /*
    Structures
@@ -72,21 +54,21 @@
    terminator.
 */
 
-   #define SIZE_OF_OBJ_NAME 51
-   #define SIZE_OF_CAT_NAME 4
+#define SIZE_OF_OBJ_NAME 51
+#define SIZE_OF_CAT_NAME 4
 
-   typedef struct
-   {
-      char starname[SIZE_OF_OBJ_NAME];
-      char catalog[SIZE_OF_CAT_NAME];
-      long int starnumber;
-      double ra;
-      double dec;
-      double promora;
-      double promodec;
-      double parallax;
-      double radialvelocity;
-   } cat_entry;
+typedef struct
+{
+   char starname[SIZE_OF_OBJ_NAME];
+   char catalog[SIZE_OF_CAT_NAME];
+   long int starnumber;
+   double ra;
+   double dec;
+   double promora;
+   double promodec;
+   double parallax;
+   double radialvelocity;
+} cat_entry;
 
 /*
    struct object:    specifies the celestial object of interest
@@ -109,13 +91,13 @@
                        data for a star
 */
 
-   typedef struct
-   {
-      short int type;
-      short int number;
-      char name[SIZE_OF_OBJ_NAME];
-      cat_entry star;
-   } object;
+typedef struct
+{
+   short int type;
+   short int number;
+   char name[SIZE_OF_OBJ_NAME];
+   cat_entry star;
+} object;
 
 /*
    struct on_surface: data for an observer's location on the surface of
@@ -132,14 +114,14 @@
    pressure           = atmospheric pressure (millibars)
 */
 
-   typedef struct
-   {
-      double latitude;
-      double longitude;
-      double height;
-      double temperature;
-      double pressure;
-   } on_surface;
+typedef struct
+{
+   double latitude;
+   double longitude;
+   double height;
+   double temperature;
+   double pressure;
+} on_surface;
 
 /*
    struct in_space:   data for an observer's location on a near-Earth
@@ -154,11 +136,11 @@
                         equinox of date
 */
 
-   typedef struct
-   {
-      double sc_pos[3];
-      double sc_vel[3];
-   } in_space;
+typedef struct
+{
+   double sc_pos[3];
+   double sc_vel[3];
+} in_space;
 
 /*
    struct observer:   data specifying the location of the observer
@@ -173,12 +155,12 @@
                         spacecraft (where = 2)
 */
 
-   typedef struct
-   {
-      short int where;
-      on_surface on_surf;
-      in_space near_earth;
-   } observer;
+typedef struct
+{
+   short int where;
+   on_surface on_surf;
+   in_space near_earth;
+} observer;
 
 /*
    struct sky_pos:    data specifying a celestial object's place on the
@@ -194,14 +176,14 @@
    rv                 = radial velocity (km/s)
 */
 
-   typedef struct
-   {
-      double r_hat[3];
-      double ra;
-      double dec;
-      double dis;
-      double rv;
-   } sky_pos;
+typedef struct
+{
+   double r_hat[3];
+   double ra;
+   double dec;
+   double dis;
+   double rv;
+} sky_pos;
 
 /*
    struct ra_of_cio:  right ascension of the Celestial Intermediate
@@ -212,338 +194,341 @@
                         to the GCRS (arcseconds)
 */
 
-   typedef struct
-   {
-      double jd_tdb;
-      double ra_cio;
-   } ra_of_cio;
+typedef struct
+{
+   double jd_tdb;
+   double ra_cio;
+} ra_of_cio;
 
 
 /*
    Define "origin" constants.
 */
 
-   #define BARYC  0
-   #define HELIOC 1
+#define BARYC  0
+#define HELIOC 1
 
 /*
    Function prototypes
 */
 
-   double *readeph (int mp, char *name, double jd,
+double* readeph(int mp, char* name, double jd,
 
-                    int *err);
+                int* err);
 
-   short int app_star (double jd_tt, cat_entry *star,
+short int app_star(double jd_tt, cat_entry* star,
+                   short int accuracy,
+
+                   double* ra, double* dec);
+
+short int virtual_star(double jd_tt, cat_entry* star,
                        short int accuracy,
 
-                       double *ra, double *dec);
+                       double* ra, double* dec);
 
-   short int virtual_star (double jd_tt, cat_entry *star,
-                           short int accuracy,
+short int astro_star(double jd_tt, cat_entry* star,
+                     short int accuracy,
 
-                           double *ra, double *dec);
+                     double* ra, double* dec);
 
-   short int astro_star (double jd_tt, cat_entry *star,
+short int app_planet(double jd_tt, object* ss_body,
+                     short int accuracy,
+
+                     double* ra, double* dec, double* dis);
+
+short int virtual_planet(double jd_tt, object* ss_body,
                          short int accuracy,
 
-                         double *ra, double *dec);
+                         double* ra, double* dec, double* dis);
 
-   short int app_planet (double jd_tt, object *ss_body,
-                         short int accuracy,
+short int astro_planet(double jd_tt, object* ss_body,
+                       short int accuracy,
 
-                         double *ra, double *dec, double *dis);
+                       double* ra, double* dec, double* dis);
 
-   short int virtual_planet (double jd_tt, object *ss_body,
-                             short int accuracy,
+short int topo_star(double jd_tt, double delta_t, cat_entry* star,
+                    on_surface* position, short int accuracy,
 
-                             double *ra, double *dec, double *dis);
+                    double* ra, double* dec);
 
-   short int astro_planet (double jd_tt, object *ss_body,
-                           short int accuracy,
+short int local_star(double jd_tt, double delta_t, cat_entry* star,
+                     on_surface* position, short int accuracy,
 
-                           double *ra, double *dec, double *dis);
+                     double* ra, double* dec);
 
-   short int topo_star (double jd_tt, double delta_t, cat_entry *star,
-                        on_surface *position, short int accuracy,
+short int topo_planet(double jd_tt, object* ss_body, double delta_t,
+                      on_surface* position, short int accuracy,
 
-                        double *ra, double *dec);
+                      double* ra, double* dec, double* dis);
 
-   short int local_star (double jd_tt, double delta_t, cat_entry *star,
-                         on_surface *position, short int accuracy,
+short int local_planet(double jd_tt, object* ss_body,
+                       double delta_t, on_surface* position,
+                       short int accuracy,
 
-                         double *ra, double *dec);
+                       double* ra, double* dec, double* dis);
 
-   short int topo_planet (double jd_tt, object *ss_body, double delta_t,
-                          on_surface *position, short int accuracy,
+short int mean_star(double jd_tt, double ra, double dec,
+                    short int accuracy,
 
-                          double *ra, double *dec, double *dis);
+                    double* ira, double* idec);
 
-   short int local_planet (double jd_tt, object *ss_body,
-                           double delta_t, on_surface *position,
-                           short int accuracy,
+short int place(double jd_tt, object* cel_object,
+                observer* location, double delta_t,
+                short int coord_sys, short int accuracy,
 
-                           double *ra, double *dec, double *dis);
+                sky_pos* output);
 
-   short int mean_star (double jd_tt, double ra, double dec,
-                        short int accuracy,
+void equ2gal(double rai, double deci,
 
-                        double *ira, double *idec);
+             double* glon, double* glat);
 
-   short int place (double jd_tt, object *cel_object,
-                    observer *location, double delta_t,
-                    short int coord_sys, short int accuracy,
+short int equ2ecl(double jd_tt, short int coord_sys,
+                  short int accuracy, double ra, double dec,
 
-                    sky_pos *output);
+                  double* elon, double* elat);
 
-   void equ2gal (double rai, double deci,
+short int equ2ecl_vec(double jd_tt, short int coord_sys,
+                      short int accuracy, double* pos1,
 
-                 double *glon, double *glat);
+                      double* pos2);
 
-   short int equ2ecl (double jd_tt, short int coord_sys,
-                      short int accuracy, double ra, double dec,
+short int ecl2equ_vec(double jd_tt, short int coord_sys,
+                      short int accuracy, double* pos1,
 
-                      double *elon, double *elat);
+                      double* pos2);
 
-   short int equ2ecl_vec (double jd_tt, short int coord_sys,
-                          short int accuracy, double *pos1,
+void equ2hor(double jd_ut1, double delta_t, short int accuracy,
+             double xp, double yp, on_surface* location, double ra,
+             double dec, short int ref_option,
 
-                          double *pos2);
+             double* zd, double* az, double* rar, double* decr);
 
-   short int ecl2equ_vec (double jd_tt, short int coord_sys,
-                          short int accuracy, double *pos1,
+short int gcrs2equ(double jd_tt, short int coord_sys,
+                   short int accuracy, double rag, double decg,
 
-                          double *pos2);
+                   double* ra, double* dec);
 
-   void equ2hor (double jd_ut1, double delta_t, short int accuracy,
-                 double xp, double yp, on_surface *location, double ra,
-                 double dec, short int ref_option,
+short int sidereal_time(double jd_high, double jd_low,
+                        double delta_t, short int gst_type,
+                        short int method, short int accuracy,
 
-                 double *zd, double *az, double *rar, double *decr);
+                        double* gst);
 
-   short int gcrs2equ (double jd_tt, short int coord_sys,
-                       short int accuracy, double rag, double decg,
+double era(double jd_high, double jd_low);
 
-                       double *ra, double *dec);
+short int ter2cel(double jd_ut_high, double jd_ut_low,
+                  double delta_t, short int method,
+                  short int accuracy, short int option, double xp,
+                  double yp, double* vec1,
 
-   short int sidereal_time (double jd_high, double jd_low,
-                            double delta_t, short int gst_type,
-                            short int method, short int accuracy,
+                  double* vec2);
 
-                            double *gst);
+short int cel2ter(double jd_ut_high, double jd_ut_low,
+                  double delta_t, short int method,
+                  short int accuracy, short int option,
+                  double xp, double yp, double* vec1,
 
-   double era (double jd_high, double jd_low);
+                  double* vec2);
 
-   short int ter2cel (double jd_ut_high, double jd_ut_low,
-                      double delta_t, short int method,
-                      short int accuracy, short int option, double xp,
-                      double yp, double *vec1,
+void spin(double angle, double* pos1,
 
-                      double *vec2);
+          double* pos2);
 
-   short int cel2ter (double jd_ut_high, double jd_ut_low,
-                      double delta_t, short int method,
-                      short int accuracy, short int option,
-                      double xp, double yp, double *vec1,
+void wobble(double tjd, short int direction, double xp, double yp,
+            double* pos1,
 
-                      double *vec2);
+            double* pos2);
 
-   void spin (double angle, double *pos1,
+void terra(on_surface* location, double st,
 
-              double *pos2);
+           double* pos, double* vel);
 
-   void wobble (double tjd, short int direction, double xp, double yp,
-                double *pos1,
+void e_tilt(double jd_tdb, short int accuracy,
 
-                double *pos2);
+            double* mobl, double* tobl, double* ee, double* dpsi,
+            double* deps);
 
-   void terra (on_surface *location, double st,
+short int cel_pole(double tjd, short int type, double dpole1,
+                   double dpole2);
 
-               double *pos, double *vel);
+double ee_ct(double jd_high, double jd_low, short int accuracy);
 
-   void e_tilt (double jd_tdb, short int accuracy,
+void frame_tie(double* pos1, short int direction,
 
-                double *mobl, double *tobl, double *ee, double *dpsi,
-                double *deps);
+               double* pos2);
 
-   short int cel_pole (double tjd, short int type, double dpole1,
-                       double dpole2);
+void proper_motion(double jd_tdb1, double* pos, double* vel,
+                   double jd_tdb2,
 
-   double ee_ct (double jd_high, double jd_low, short int accuracy);
+                   double* pos2);
 
-   void frame_tie (double *pos1, short int direction,
+void bary2obs(double* pos, double* pos_obs,
 
-                   double *pos2);
+              double* pos2, double* lighttime);
 
-   void proper_motion (double jd_tdb1, double *pos, double *vel,
-                       double jd_tdb2,
+short int geo_posvel(double jd_tt, double delta_t,
+                     short int accuracy, observer* obs,
 
-                       double *pos2);
+                     double* pos, double* vel);
 
-   void bary2obs (double *pos, double *pos_obs,
+short int light_time(double jd_tdb, object* ss_object,
+                     double pos_obs[3], double tlight0,
+                     short int accuracy,
 
-                  double *pos2, double *lighttime);
+                     double pos[3], double* tlight);
 
-   short int geo_posvel (double jd_tt, double delta_t,
-                         short int accuracy, observer *obs,
+double d_light(double* pos1, double* pos_obs);
 
-                         double *pos, double *vel);
+short int grav_def(double jd_tdb, short int loc_code,
+                   short int accuracy, double* pos1, double* pos_obs,
 
-   short int light_time (double jd_tdb, object *ss_object,
-                         double pos_obs[3], double tlight0,
-                         short int accuracy,
+                   double* pos2);
 
-                         double pos[3], double *tlight);
+void grav_vec(double* pos1, double* pos_obs, double* pos_body,
+              double rmass,
 
-   double d_light (double *pos1, double *pos_obs);
+              double* pos2);
 
-   short int grav_def (double jd_tdb, short int loc_code,
-                       short int accuracy, double *pos1, double *pos_obs,
+void aberration(double* pos, double* ve, double lighttime,
 
-                       double *pos2);
+                double* pos2);
 
-   void grav_vec (double *pos1, double *pos_obs, double *pos_body,
-                  double rmass,
+void rad_vel(object* cel_object, double* pos, double* vel,
+             double* vel_obs, double d_obs_geo, double d_obs_sun,
+             double d_obj_sun,
 
-                  double *pos2);
+             double* rv);
 
-   void aberration (double *pos, double *ve, double lighttime,
+short int precession(double jd_tdb1, double* pos1, double jd_tdb2,
 
-                    double *pos2);
+                     double* pos2);
 
-   void rad_vel (object *cel_object, double *pos, double *vel,
-                 double *vel_obs, double d_obs_geo, double d_obs_sun,
-                 double d_obj_sun,
+void nutation(double jd_tdb, short int direction, short int accuracy,
+              double* pos,
 
-                 double *rv);
+              double* pos2);
 
-   short int precession (double jd_tdb1, double *pos1, double jd_tdb2,
+void nutation_angles(double t, short int accuracy,
 
-                         double *pos2);
+                     double* dpsi, double* deps);
 
-   void nutation (double jd_tdb, short int direction, short int accuracy,
-                  double *pos,
+void fund_args(double t,
 
-                  double *pos2);
+               double a[5]);
 
-   void nutation_angles (double t, short int accuracy,
+double mean_obliq(double jd_tdb);
 
-                         double *dpsi, double *deps);
+short int vector2radec(double* pos,
 
-   void fund_args (double t,
+                       double* ra, double* dec);
 
-                   double a[5]);
+void radec2vector(double ra, double dec, double dist,
 
-   double mean_obliq (double jd_tdb);
+                  double* vector);
 
-   short int vector2radec (double *pos,
+void starvectors(cat_entry* star,
 
-                           double *ra, double *dec);
+                 double* pos, double* vel);
 
-   void radec2vector (double ra, double dec, double dist,
+void tdb2tt(double tdb_jd,
 
-                      double *vector);
+            double* tt_jd, double* secdiff);
 
-   void starvectors (cat_entry *star,
+short int cio_ra(double jd_tt, short int accuracy,
 
-                     double *pos, double *vel);
+                 double* ra_cio);
 
-   void tdb2tt (double tdb_jd,
+short int cio_location(double jd_tdb, short int accuracy,
 
-                double *tt_jd, double *secdiff);
+                       double* ra_cio, short int* ref_sys);
 
-   short int cio_ra (double jd_tt, short int accuracy,
+short int cio_basis(double jd_tdb, double ra_cio, short int ref_sys,
+                    short int accuracy,
 
-                     double *ra_cio);
+                    double* x, double* y, double* z);
 
-   short int cio_location (double jd_tdb, short int accuracy,
+short int cio_array(double jd_tdb, long int n_pts,
 
-                           double *ra_cio, short int *ref_sys);
+                    ra_of_cio* cio);
 
-   short int cio_basis (double jd_tdb, double ra_cio, short int ref_sys,
-                        short int accuracy,
+double ira_equinox(double jd_tdb, short int equinox,
+                   short int accuracy);
 
-                        double *x, double *y, double *z);
+short int ephemeris(double jd[2], object* cel_obj, short int origin,
+                    short int accuracy,
 
-   short int cio_array (double jd_tdb, long int n_pts,
+                    double* pos, double* vel);
 
-                        ra_of_cio *cio);
+void transform_hip(cat_entry* hipparcos,
 
-   double ira_equinox (double jd_tdb, short int equinox,
-                       short int accuracy);
+                   cat_entry* hip_2000);
 
-   short int ephemeris (double jd[2], object *cel_obj, short int origin,
-                        short int accuracy,
+short int transform_cat(short int option, double date_incat,
+                        cat_entry* incat, double date_newcat,
+                        const char* newcat_id,
+                        cat_entry* newcat);
 
-                        double *pos, double *vel);
+void limb_angle(double pos_obj[3], double pos_obs[3],
 
-   void transform_hip (cat_entry *hipparcos,
+                double* limb_ang, double* nadir_ang);
 
-                       cat_entry *hip_2000);
+double refract(on_surface* location, short int ref_option,
+               double zd_obs);
 
-   short int transform_cat (short int option, double date_incat,
-                            cat_entry *incat, double date_newcat,
-                            const char* newcat_id,
-                            cat_entry *newcat);
+double julian_date(short int year, short int month, short int day,
+                   double hour);
 
-   void limb_angle (double pos_obj[3], double pos_obs[3],
+void cal_date(double tjd,
 
-                    double *limb_ang, double *nadir_ang);
+              short int* year, short int* month, short int* day,
+              double* hour);
 
-   double refract (on_surface *location, short int ref_option,
-                   double zd_obs);
+double norm_ang(double angle);
 
-   double julian_date (short int year, short int month, short int day,
-                       double hour);
+short int make_cat_entry(const char* star_name,
+                         const char* catalog,
+                         long int star_num, double ra, double dec,
+                         double pm_ra, double pm_dec, double parallax,
+                         double rad_vel,
+                         cat_entry* star);
 
-   void cal_date (double tjd,
+short int make_object(short int type, short int number,
+                      const char* name,
+                      cat_entry* star_data,
 
-                  short int *year, short int *month, short int *day,
-                  double *hour);
+                      object* cel_obj);
 
-   double norm_ang (double angle);
+short int make_observer(short int where, on_surface* obs_surface,
+                        in_space* obs_space,
 
-   short int make_cat_entry (const char* star_name,
-                             const char* catalog,
-                             long int star_num, double ra, double dec,
-                             double pm_ra, double pm_dec, double parallax,
-                             double rad_vel,
-                             cat_entry *star);
+                        observer* obs);
 
-   short int make_object (short int type, short int number,
-                          const char* name,
-                          cat_entry *star_data,
+void make_observer_at_geocenter(
 
-                          object *cel_obj);
+    observer* obs_at_geocenter);
 
-   short int make_observer (short int where, on_surface *obs_surface,
-                            in_space *obs_space,
+void make_observer_on_surface(double latitude, double longitude,
+                              double height, double temperature,
+                              double pressure,
 
-                            observer *obs);
+                              observer* obs_on_surface);
 
-   void make_observer_at_geocenter (
+void make_observer_in_space(double sc_pos[3], double sc_vel[3],
 
-                                 observer *obs_at_geocenter);
+                            observer* obs_in_space);
 
-   void make_observer_on_surface (double latitude, double longitude,
-                                  double height, double temperature,
-                                  double pressure,
+void make_on_surface(double latitude, double longitude,
+                     double height,
+                     double temperature, double pressure,
 
-                                  observer *obs_on_surface);
+                     on_surface* obs_surface);
 
-   void make_observer_in_space (double sc_pos[3], double sc_vel[3],
+void make_in_space(double sc_pos[3], double sc_vel[3],
 
-                                observer *obs_in_space);
+                   in_space* obs_space);
 
-   void make_on_surface (double latitude, double longitude,
-                         double height,
-                         double temperature, double pressure,
 
-                         on_surface *obs_surface);
-
-   void make_in_space (double sc_pos[3], double sc_vel[3],
-
-                       in_space *obs_space);
-
-
+#ifdef __cplusplus
+}
+#endif
 #endif

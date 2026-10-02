@@ -11,22 +11,18 @@
 */
 
 #ifndef _EPHMAN_
-   #define _EPHMAN_
+#define _EPHMAN_
 
 /*
    Standard libraries
 */
 
-#ifndef __MATH__
-   #include <math.h>
-#endif
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-#ifndef __STDLIB__
-   #include <stdlib.h>
-#endif
-
-#ifndef __STDIO__
-   #include <stdio.h>
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /*
@@ -49,8 +45,7 @@ extern FILE *EPHFILE;
    Function prototypes
 */
 
-short int ephem_open (char *ephem_name,
-
+short int ephem_open (const char *ephem_name,
                       double *jd_begin, double *jd_end, 
                       short int *de_number);
 
@@ -58,17 +53,17 @@ short int ephem_close (void);
 
 short int planet_ephemeris (double tjd[2], short int target, 
                             short int center, 
-
                             double *position, double *velocity);
 
 short int state (double *jed, short int target,
-
                  double *target_pos, double *target_vel);
 
 void interpolate (double *buf, double *t, long int ncm, long int na,
-
                   double *position, double *velocity);
 
 void split (double tt, double *fr);
 
+#ifdef __cplusplus
+}
+#endif
 #endif
