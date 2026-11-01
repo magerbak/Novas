@@ -1,4 +1,9 @@
 # Naval Observatory Vector Astrometry Software
+
+Note: If you have stumbled across this repository in search of a ready-to-use C astrometry library, this is almost certainly not the repository you are looking for. NOVAS is the granddaddy of them all, but the original library has many shortcomings from a software standpoint, some of which I have tried to address here. However, I would instead point you to other repositories that have done a better job, which I only discovered after doing much of this work:
+* https://github.com/Sigmyne/SuperNOVAS. As they say "The NOVAS C astrometry library, made better."
+* https://github.com/cosinekitty/astronomy. Small footprint with self-contained ephemerides models. Particularly good for embedded devices and offline use. I have successfully used this to build a celestial navigation application with a continual almanac for use on an embedded device.
+
 ## C Edition C3.1 (31 March 2011)
 
 This repository is an import of the USNO NOVAS C v3.1 library, with the simple
@@ -74,7 +79,7 @@ library from parsing those files.
 
 Fortunately, JPL does host some pregenerated binary files for both big and little-endian
 architectures, which is what this project uses instead (although these are not
-mentioned in any of the documentation that I came across). The downside is that
+mentioned in any of the documentation included with the NOVAS library itself). The downside is that
 there is less flexibility with the date ranges provided and the files are larger than
 needed for many applications. I think a tool for trimming binary files would be
 straightforward, so I may add that at some point.
